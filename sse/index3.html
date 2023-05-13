@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="UTF-8"> 
+<style media="screen" type="text/css">
+div#number {
+	margin: 10px auto 10px auto;
+	width: 60px;  
+	font-size: 115%; 
+  text-align: center; 
+	background: lightgreen;
+	padding: 5px;   
+}
+</style>
+</head>
+<body>
+
+<h1>Getting server updates</h1>
+<div id="number"></div>
+<div id="result"></div>
+
+<script>
+
+if(typeof(EventSource) !== "undefined") {
+    var source = new EventSource("sse3.php");
+    
+    source.addEventListener("message", function(e) {
+        var data = JSON.parse(e.data);
+        //console.log(data["msg"]);
+        document.getElementById("result").innerHTML += data.msg + "<br>";
+        document.getElementById("number").innerHTML = data.num + "<br>";
+			}, false);
+      
+    source.addEventListener("mojaUdalost", function(e) {
+        console.log(e.data);
+			}, false);
+      
+   	source.addEventListener("open", function(e) {
+				document.getElementById("result").innerHTML += "OPENED<br>";
+			}, false);
+
+		source.addEventListener("error", function(e) {
+				document.getElementById("result").innerHTML += "ERROR<br>";
+				if (e.readyState == EventSource.CLOSED) {
+				document.getElementById("result").innerHTML += "CLOSED<br>";
+				}
+			}, false);
+      
+} else {
+    document.getElementById("result").innerHTML = "Sorry, your browser does not support server-sent events...";
+}
+
+</script>
+
+</body>
+</html>

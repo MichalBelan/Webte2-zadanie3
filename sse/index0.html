@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SSE generator</title>
+</head>
+<body>
+
+<div id="result"></div>
+
+<script>
+
+if(typeof(EventSource) !== "undefined") {
+    var source = new EventSource("sse0.php");
+    
+    source.addEventListener("message", function(e) {
+        var data = JSON.parse(e.data);
+        document.getElementById("result").innerHTML = e.data;
+			}, false);
+  
+} else {
+    document.getElementById("result").innerHTML = "Sorry, your browser does not support server-sent events...";
+}
+
+</script>
+
+</body>
+</html>
